@@ -12,11 +12,13 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-public class board {
+public class Board {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     @Column(length = 1000)
     private String content;
+    private String author;
 }
