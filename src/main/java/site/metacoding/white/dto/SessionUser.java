@@ -14,4 +14,5 @@ public class SessionUser {
         this.id = user.getId();
         this.username = user.getUsername();
     }
+
 }
