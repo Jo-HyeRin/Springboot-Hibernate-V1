@@ -2,28 +2,26 @@ package site.metacoding.white.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import site.metacoding.white.domain.User;
 
 public class UserReqDto {
 
     @Setter
     @Getter
-    public static class JoinDto {
+    public static class JoinReqDto { // 로그인 전 (인증관련) 로직들 네이밍 시에는 전부 앞에 엔티티 안 붙임. (/user 이런거 쓰지말자)
         private String username;
         private String password;
 
-        // 클라이언트한테 받는게 아님!!
-        @Setter
-        @Getter
-        public class ServiceDto {
-
-        }
-
-        private ServiceDto serviceDto;
-
-        public void newInstance() {
-            serviceDto = new ServiceDto();
+        public User toEntity() {
+            return User.builder().username(username).password(password).build();
         }
     }
 
-    // DTO는 여기다 계속 추가하면 된다.
+    @Setter
+    @Getter
+    public static class LoginReqDto {
+        private String username;
+        private String password;
+    }
+
 }

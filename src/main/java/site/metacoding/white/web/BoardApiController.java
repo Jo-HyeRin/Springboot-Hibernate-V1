@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.white.domain.Board;
 import site.metacoding.white.domain.User;
-import site.metacoding.white.dto.BoardReqDto.BoardSaveDto;
+import site.metacoding.white.dto.BoardReqDto.BoardSaveReqDto;
 import site.metacoding.white.service.BoardService;
 
 @RequiredArgsConstructor
@@ -27,7 +27,7 @@ public class BoardApiController {
 
     @GetMapping("/board/{id}")
     public Board findById(@PathVariable Long id) {
-        return boardService.findById(id);
+        return boardService.findById(id); // Entity -> JSON 변경 (MessageConverter)
     }
 
     @GetMapping("/v2/board/{id}")
@@ -47,18 +47,12 @@ public class BoardApiController {
         return "ok";
     }
 
-    // @PostMapping("/board")
-    // public String save(@RequestBody Board board) {
-    // boardService.save(board);
-    // return "ok";
-    // }
-
-    @PostMapping("/v2/board")
-    public String saveV2(@RequestBody BoardSaveDto boardSaveDto) {
+    @PostMapping("/board")
+    public String save(@RequestBody BoardSaveReqDto boardSaveReqDto) {
         User principal = (User) session.getAttribute("principal");
         // insert into board(title, content, user_id) values(?,?,?) 쿼리가 수행되어야 한다.
-        boardSaveDto.setUser(principal);
-        boardService.save(boardSaveDto);
+        boardSaveReqDto.setUser(principal);
+        boardService.save(boardSaveReqDto); // 컨트롤러에서 서비스로 갈 때는 단 하나의 객체만 전달한다. 컨트롤러는 단 하나의 객체만을 전달할 책임!
         return "ok";
     }
 
