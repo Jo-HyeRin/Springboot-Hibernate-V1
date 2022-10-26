@@ -66,8 +66,8 @@ public class BoardApiController {
     }
 
     @DeleteMapping("/board/{id}")
-    public String deleteById(@PathVariable Long id) {
+    public ResponseDto<?> deleteById(@PathVariable Long id) {
         boardService.deleteById(id);
-        return "ok";
+        return new ResponseDto<>(1, "성공", null);
     }
 }

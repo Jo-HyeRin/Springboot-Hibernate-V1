@@ -39,12 +39,15 @@ public class BoardRepository {
         // Board.class)
         // .setParameter("id", id)
         // .getSingleResult();
-
-        Optional<Board> boardOP = Optional
-                .ofNullable(em.createQuery("select b from Board b where b.id = :id", Board.class)
-                        .setParameter("id", id)
-                        .getSingleResult());
-        return boardOP;
+        try {
+            Optional<Board> boardOP = Optional
+                    .ofNullable(em.createQuery("select b from Board b where b.id = :id", Board.class)
+                            .setParameter("id", id)
+                            .getSingleResult());
+            return boardOP;
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     public List<Board> findAll() {
