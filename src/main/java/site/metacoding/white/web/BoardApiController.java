@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.white.domain.Board;
 import site.metacoding.white.dto.BoardReqDto.BoardSaveReqDto;
+import site.metacoding.white.dto.BoardRespDto.BoardAllRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto;
 import site.metacoding.white.dto.ResponseDto;
 import site.metacoding.white.dto.SessionUser;
@@ -59,7 +60,7 @@ public class BoardApiController {
     }
 
     @GetMapping("/board")
-    public List<Board> findAll() {
+    public List<BoardAllRespDto> findAll() {
         return boardService.findAll();
     }
 

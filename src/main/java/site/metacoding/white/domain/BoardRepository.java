@@ -22,6 +22,24 @@ public class BoardRepository {
 
     // 게시글 상세보기
     public Optional<Board> findById(Long id) {
+        // Board boardPS = em.createQuery("select b from Board b where b.id = :id",
+        // Board.class)
+        // .setParameter("id", id)
+        // .getSingleResult();
+
+        // Board boardPS = (Board) em
+        // .createNativeQuery("select * from board b inner join user u on b.user_id =
+        // u.id where b.id = :id",
+        // Board.class)
+        // .setParameter("id", id)
+        // .getSingleResult();
+
+        // Board boardPS = em
+        // .createQuery("select b from Board b join fetch b.user u where b.id = :id",
+        // Board.class)
+        // .setParameter("id", id)
+        // .getSingleResult();
+
         Optional<Board> boardOP = Optional
                 .ofNullable(em.createQuery("select b from Board b where b.id = :id", Board.class)
                         .setParameter("id", id)

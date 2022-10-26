@@ -64,4 +64,34 @@ public class BoardRespDto {
         }
 
     }
+
+    @Setter
+    @Getter
+    public static class BoardAllRespDto {
+        private Long id;
+        private String title;
+        private String content;
+        private UserDto userDto;
+
+        @Setter
+        @Getter
+        public static class UserDto {
+            private Long id;
+            private String username;
+
+            public UserDto(User user) {
+                this.id = user.getId();
+                this.username = user.getUsername();
+            }
+        }
+
+        public BoardAllRespDto(Board board) {
+            this.id = board.getId();
+            this.title = board.getTitle();
+            this.content = board.getContent();
+            this.userDto = new UserDto(board.getUser());
+        }
+
+    }
+
 }
