@@ -12,9 +12,11 @@ import site.metacoding.white.domain.Board;
 import site.metacoding.white.domain.BoardRepository;
 import site.metacoding.white.domain.UserRepository;
 import site.metacoding.white.dto.BoardReqDto.BoardSaveReqDto;
+import site.metacoding.white.dto.BoardReqDto.BoardUpdateReqDto;
 import site.metacoding.white.dto.BoardRespDto.BoardAllRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardDetailRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto;
+import site.metacoding.white.dto.BoardRespDto.BoardUpdateRespDto;
 
 @RequiredArgsConstructor
 @Service
@@ -46,29 +48,29 @@ public class BoardService {
     }
 
     @Transactional
-    public void update(Long id, Board board) {
+    public BoardUpdateRespDto update(BoardUpdateReqDto boardUpdateReqDto) {
+        Long id = boardUpdateReqDto.getId();
         Optional<Board> boardOP = boardRepository.findById(id);
         if (boardOP.isPresent()) {
-            boardOP.get().update(board.getTitle(), board.getContent());
+            Board boardPS = boardOP.get();
+            boardPS.update(boardUpdateReqDto.getTitle(), boardUpdateReqDto.getContent());
+            return new BoardUpdateRespDto(boardPS);
         } else {
-            throw new RuntimeException("해당 " + id + "로 업데이트를 할 수 없습니다.");
+            throw new RuntimeException("해당 " + id + "로 수정을 할 수 없습니다.");
         }
     }
 
     @Transactional(readOnly = true)
     public List<BoardAllRespDto> findAll() {
-        // Board 자체 findAll 해서 boardList 생성
+
         List<Board> boardList = boardRepository.findAll();
 
-        // DTO로 변환하기 - DTO 담을 배열 생성
         List<BoardAllRespDto> boardAllRespDtoList = new ArrayList<>();
 
-        // boardList만큼 for문 돌려 DTO List 에 값 넣기
         for (Board board : boardList) {
             boardAllRespDtoList.add(new BoardAllRespDto(board));
         }
 
-        // DTO List return
         return boardAllRespDtoList;
     }
 
