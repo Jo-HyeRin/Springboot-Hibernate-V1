@@ -41,7 +41,7 @@ public class BoardRepository {
         // .getSingleResult();
         try {
             Optional<Board> boardOP = Optional
-                    .ofNullable(em.createQuery("select b from Board b where b.id = :id", Board.class)
+                    .of(em.createQuery("select b from Board b where b.id = :id", Board.class)
                             .setParameter("id", id)
                             .getSingleResult());
             return boardOP;
