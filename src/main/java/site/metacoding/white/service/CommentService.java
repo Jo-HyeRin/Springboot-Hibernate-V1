@@ -44,7 +44,6 @@ public class CommentService {
         } else {
             throw new RuntimeException("해당 " + id + "로 삭제할 수 없습니다.");
         }
-
     }
 
 }

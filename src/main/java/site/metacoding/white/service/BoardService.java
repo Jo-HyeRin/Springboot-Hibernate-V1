@@ -38,6 +38,7 @@ public class BoardService {
         return boardSaveRespDto;
     }
 
+    // 게시글 상세보기
     @Transactional(readOnly = true)
     public BoardDetailRespDto findById(Long id) {
         Optional<Board> boardOP = boardRepository.findById(id);
