@@ -39,9 +39,12 @@ public class BoardRepository {
         // Board.class)
         // .setParameter("id", id)
         // .getSingleResult();
+
         try {
             Optional<Board> boardOP = Optional
-                    .of(em.createQuery("select b from Board b where b.id = :id", Board.class)
+                    .of(em.createQuery(
+                            "select b from Board b join fetch b.user u join fetch b.commentList c where b.id = :id",
+                            Board.class)
                             .setParameter("id", id)
                             .getSingleResult());
             return boardOP;
