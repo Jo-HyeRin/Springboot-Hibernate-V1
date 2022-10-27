@@ -22,8 +22,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final SHA256 sha256;
 
-    // 응답의 DTO는 서비스에서 만든다.
-    @Transactional // 트랜잭션을 붙이지 않으면 영속화 되어 있는 객체가 flush 되지 않음.
+    @Transactional
     public JoinRespDto save(JoinReqDto joinReqDto) {
         // 비밀번호 해시
         String encPassword = sha256.encrypt(joinReqDto.getPassword());
