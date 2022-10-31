@@ -1,10 +1,7 @@
 package site.metacoding.white.web;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.white.dto.BoardReqDto.BoardSaveReqDto;
 import site.metacoding.white.dto.BoardReqDto.BoardUpdateReqDto;
-import site.metacoding.white.dto.BoardRespDto.BoardAllRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto;
 import site.metacoding.white.dto.ResponseDto;
 import site.metacoding.white.dto.SessionUser;
@@ -46,7 +42,7 @@ public class BoardApiController {
     // return "ok";
     // }
 
-    @PutMapping("/board/{id}")
+    @PutMapping("/s/board/{id}")
     public ResponseDto<?> update(@PathVariable Long id, @RequestBody BoardUpdateReqDto boardUpdateReqDto) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         if (sessionUser == null) {
@@ -56,7 +52,7 @@ public class BoardApiController {
         return new ResponseDto<>(1, "성공", boardService.update(boardUpdateReqDto));
     }
 
-    @PostMapping("/board")
+    @PostMapping("/s/board")
     public ResponseDto<? extends Object> save(@RequestBody BoardSaveReqDto boardSaveReqDto) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         if (sessionUser == null) {
@@ -68,17 +64,15 @@ public class BoardApiController {
     }
 
     @GetMapping("/board")
-    public List<BoardAllRespDto> findAll() {
-        return boardService.findAll();
+    public ResponseDto<?> findAll() {
+        return new ResponseDto<>(1, "성공", boardService.findAll());
     }
 
-    @DeleteMapping("/board/{id}")
+    @DeleteMapping("/s/board/{id}")
     public ResponseDto<?> deleteById(@PathVariable Long id) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
-        if (sessionUser == null) {
-            throw new RuntimeException("로그인을 진행해주세요");
-        }
-        boardService.deleteById(id);
+
+        boardService.deleteById(id, sessionUser.getId());
         return new ResponseDto<>(1, "성공", null);
     }
 }

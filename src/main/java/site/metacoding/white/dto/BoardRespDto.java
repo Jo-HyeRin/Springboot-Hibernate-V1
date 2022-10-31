@@ -20,7 +20,7 @@ public class BoardRespDto {
         private Long id;
         private String title;
         private String content;
-        private UserDto userDto;
+        private UserDto user;
 
         @Setter
         @Getter
@@ -39,7 +39,7 @@ public class BoardRespDto {
             this.id = board.getId();
             this.title = board.getTitle();
             this.content = board.getContent();
-            this.userDto = new UserDto(board.getUser());
+            this.user = new UserDto(board.getUser());
         }
 
     }
@@ -50,7 +50,7 @@ public class BoardRespDto {
         private Long id;
         private String title;
         private String content;
-        private BoardUserDto userDto;
+        private BoardUserDto user;
         private List<CommentDto> commentList = new ArrayList<>();
 
         @Setter
@@ -95,7 +95,7 @@ public class BoardRespDto {
             this.id = board.getId();
             this.title = board.getTitle();
             this.content = board.getContent();
-            this.userDto = new BoardUserDto(board.getUser());
+            this.user = new BoardUserDto(board.getUser());
 
             // List<CommentDto> <---List<Comment>
             // this.commentList = board.getCommentList().stream()
@@ -112,7 +112,7 @@ public class BoardRespDto {
     public static class BoardAllRespDto {
         private Long id;
         private String title;
-        private UserDto userDto;
+        private UserDto user;
 
         @Setter
         @Getter
@@ -129,7 +129,7 @@ public class BoardRespDto {
         public BoardAllRespDto(Board board) {
             this.id = board.getId();
             this.title = board.getTitle();
-            this.userDto = new UserDto(board.getUser());
+            this.user = new UserDto(board.getUser());
         }
 
     }
@@ -140,7 +140,7 @@ public class BoardRespDto {
         private Long id;
         private String title;
         private String content;
-        private UserDto userDto;
+        private UserDto user;
 
         @Setter
         @Getter
@@ -156,7 +156,7 @@ public class BoardRespDto {
             this.id = board.getId();
             this.title = board.getTitle();
             this.content = board.getContent();
-            this.userDto = new UserDto(board.getUser());
+            this.user = new UserDto(board.getUser());
         }
 
     }
