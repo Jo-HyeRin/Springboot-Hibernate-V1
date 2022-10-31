@@ -21,6 +21,8 @@ import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
 import site.metacoding.white.dto.UserReqDto.JoinReqDto;
+import site.metacoding.white.dto.UserReqDto.LoginReqDto;
+import site.metacoding.white.service.UserService;
 
 @ActiveProfiles("test")
 // @Transactional // 통합테스트에서 RANDOM_PORT를 사용하면 새로운 스레드로 돌기때문에 rollback 무의미
@@ -28,14 +30,12 @@ import site.metacoding.white.dto.UserReqDto.JoinReqDto;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT) // 롤백이 안된다.
 public class UserApiControllerTest {
 
-    // @Autowired : DI 해주는 코드
-    // private UserService userService;
-
     @Autowired
     private TestRestTemplate rt; // postman으로 요청하는 것처럼 버퍼로 직접 요청을 할 수 있게 해준다. 통신에 이용하는 라이브러리.
-
     @Autowired
     private ObjectMapper om; // 잭슨이 가지고 있는 라이브러리 : JSON변환
+    @Autowired // : DI 해주는 코드
+    private UserService userService;
 
     private static HttpHeaders headers;
 
@@ -47,14 +47,14 @@ public class UserApiControllerTest {
     }
 
     @Test
-    public void join_test() throws JsonProcessingException {
+    public void join_test() throws JsonProcessingException { // 회원가입 테스트
         // given : JoinReqDto가 필요하네
         JoinReqDto joinReqDto = new JoinReqDto(); // 해당 dto에 getter setter 만 설정되어있네 setter 이용해주자
         joinReqDto.setUsername("hoho");
         joinReqDto.setPassword("1234");
 
         String body = om.writeValueAsString(joinReqDto);
-        System.out.println(body);
+        System.out.println("디버그 : " + body);
 
         // when
         HttpEntity<String> request = new HttpEntity<>(body, headers);
@@ -72,27 +72,30 @@ public class UserApiControllerTest {
     }
 
     @Test
-    public void join_test2() throws JsonProcessingException {
-        // given
+    public void login_test() throws JsonProcessingException { // 로그인 테스트
+        // data init : DB에 회원 정보가 있어야 한다. insert 해보자.
         JoinReqDto joinReqDto = new JoinReqDto();
-        joinReqDto.setUsername("very");
+        joinReqDto.setUsername("hoho");
         joinReqDto.setPassword("1234");
+        userService.save(joinReqDto);
 
-        String body = om.writeValueAsString(joinReqDto);
-        System.out.println(body);
+        // given
+        LoginReqDto loginReqDto = new LoginReqDto();
+        loginReqDto.setUsername("hoho");
+        loginReqDto.setPassword("1234");
+        String body = om.writeValueAsString(loginReqDto);
+        System.out.println("디버그 : " + body);
 
         // when
         HttpEntity<String> request = new HttpEntity<>(body, headers);
-        ResponseEntity<String> response = rt.exchange("/join", HttpMethod.POST,
-                request, String.class);
+        ResponseEntity<String> response = rt.exchange("/login", HttpMethod.POST, request, String.class);
+        System.out.println("디버그 : " + response.getBody());
 
         // then
-        // System.out.println(response.getStatusCode());
-        // System.out.println(response.getBody());
-
         DocumentContext dc = JsonPath.parse(response.getBody());
-        // System.out.println(dc.jsonString());
         Integer code = dc.read("$.code");
+        String username = dc.read("$.data.username"); // jayway Jsonpath 라이브러리 문법
         Assertions.assertThat(code).isEqualTo(1);
+        Assertions.assertThat(username).isEqualTo("hoho");
     }
 }

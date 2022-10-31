@@ -6,12 +6,14 @@ import java.util.stream.Collectors;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import site.metacoding.white.domain.Board;
 import site.metacoding.white.domain.Comment;
 import site.metacoding.white.domain.User;
 
 public class BoardRespDto {
 
+    @ToString
     @Setter
     @Getter
     public static class BoardSaveRespDto {
@@ -30,6 +32,7 @@ public class BoardRespDto {
                 this.id = user.getId();
                 this.username = user.getUsername();
             }
+
         }
 
         public BoardSaveRespDto(Board board) {
@@ -95,9 +98,12 @@ public class BoardRespDto {
             this.userDto = new BoardUserDto(board.getUser());
 
             // List<CommentDto> <---List<Comment>
-            this.commentList = board.getCommentList().stream()
-                    .map((comment) -> new CommentDto(comment))
-                    .collect(Collectors.toList());
+            // this.commentList = board.getCommentList().stream()
+            // .map((comment) -> new CommentDto(comment))
+            // .collect(Collectors.toList());
+            for (Comment c : board.getCommentList()) {
+                commentList.add(new CommentDto(c));
+            }
         }
     }
 

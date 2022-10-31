@@ -20,11 +20,9 @@ public class Comment {
     private Long id;
     private String content;
 
-    // User 누가 썼는지 (User:Comment=1:N)
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    // Board 어디에 썼는지 (Board:Comment=1:N)
     @ManyToOne(fetch = FetchType.LAZY)
     private Board board;
 
@@ -34,5 +32,8 @@ public class Comment {
         this.content = content;
         this.user = user;
         this.board = board;
+        // 양방향 데이터 매핑
+        this.board.addComment(this); // 1차 캐시에 있는 board에 comment 추가하기
     }
+
 }
