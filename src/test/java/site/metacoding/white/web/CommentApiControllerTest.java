@@ -24,26 +24,24 @@ import site.metacoding.white.domain.Comment;
 import site.metacoding.white.domain.CommentRepository;
 import site.metacoding.white.domain.User;
 import site.metacoding.white.domain.UserRepository;
+import site.metacoding.white.dto.CommentReqDto.CommentSaveReqDto;
 import site.metacoding.white.dto.SessionUser;
-import site.metacoding.white.dto.UserReqDto.JoinReqDto;
-import site.metacoding.white.dto.UserReqDto.LoginReqDto;
 import site.metacoding.white.util.SHA256;
 
 @ActiveProfiles("test")
-// @Transactional // 통합테스트에서 RANDOM_PORT를 사용하면 새로운 스레드로 돌기때문에 rollback 무의미
-@Sql("classpath:truncate.sql") // classpath : 자바 classpath 공부하기 . 스프링은 기본적으로 resource 폴더 내에 설정되어있다.
+@Sql("classpath:truncate.sql")
 @Transactional // 트랜잭션 안붙이면 영속성 컨텍스트에서 DB로 flush 안됨 (Hibernate 사용시)
 @AutoConfigureMockMvc // MockMvc Ioc 컨테이너에 등록
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK) // 가짜 환경으로 실행
-public class UserApiControllerTest {
+public class CommentApiControllerTest {
 
     private static final String APPLICATION_JSON = "application/json; charset=utf-8";
 
-    @Autowired // : DI 코드
+    @Autowired
     private MockMvc mvc;
 
     @Autowired
-    private ObjectMapper om; // 잭슨이 가지고 있는 라이브러리 : JSON변환
+    private ObjectMapper om;
 
     @Autowired
     private UserRepository userRepository;
@@ -96,40 +94,19 @@ public class UserApiControllerTest {
     }
 
     @Test
-    public void join_test() throws Exception {
-        // given : JoinReqDto가 필요하네
-        JoinReqDto joinReqDto = new JoinReqDto(); // 해당 dto에 getter setter 만 설정되어있네 setter 이용해주자
-        joinReqDto.setUsername("hoho");
-        joinReqDto.setPassword("1234");
-
-        String body = om.writeValueAsString(joinReqDto);
-        System.out.println(body);
-
-        // when
-        ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.post("/join").content(body)
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON));
-        // 요청주소, 메서드(POST 로 작성해도 되지만 실수하지않기위해 !), 헤더와 바디데이터, 응답타입
-
-        // then
-        MvcResult mvcResult = resultActions.andReturn();
-        System.out.println("디버그 : " + mvcResult.getResponse().getContentAsString());
-        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1L)); // 코드가 1이면 성공이니까 code를 확인하면 된다.
-
-    }
-
-    @Test
-    public void login_test() throws Exception {
+    public void save_test() throws Exception {
         // given
-        LoginReqDto loginReqDto = new LoginReqDto();
-        loginReqDto.setUsername("ssar");
-        loginReqDto.setPassword("1234");
-        String body = om.writeValueAsString(loginReqDto);
+        CommentSaveReqDto commentSaveReqDto = new CommentSaveReqDto();
+        commentSaveReqDto.setContent("추천해요");
+        commentSaveReqDto.setBoardId(1L);
+
+        String body = om.writeValueAsString(commentSaveReqDto);
 
         // when
         ResultActions resultActions = mvc
-                .perform(MockMvcRequestBuilders.post("/login").content(body)
-                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON));
+                .perform(MockMvcRequestBuilders.post("/comment").content(body)
+                        .contentType(APPLICATION_JSON).accept(APPLICATION_JSON)
+                        .session(session));
 
         // then
         MvcResult mvcResult = resultActions.andReturn();
@@ -137,4 +114,20 @@ public class UserApiControllerTest {
         resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1L));
     }
 
+    @Test
+    public void delete_test() throws Exception {
+        // given
+        Long id = 1L;
+
+        // when
+        ResultActions resultActions = mvc
+                .perform(MockMvcRequestBuilders.delete("/comment/" + id)
+                        .accept(APPLICATION_JSON)
+                        .session(session));
+
+        // then
+        MvcResult mvcResult = resultActions.andReturn();
+        System.out.println("디버그 : " + mvcResult.getResponse().getContentAsString());
+        resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.code").value(1L));
+    }
 }

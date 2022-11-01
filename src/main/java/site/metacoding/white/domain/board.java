@@ -3,6 +3,7 @@ package site.metacoding.white.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -32,7 +36,9 @@ public class Board {
     private User user;
 
     // 조회를 위해서만 필요함
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    // CascadeType.ALL를 걸면 Board 객체 save시에 comment를 함께 저장할 수 있다.
+    @OnDelete(action = OnDeleteAction.CASCADE) // 양방향 매핑시 걸어준다.
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
     public void addComment(Comment comment) {
