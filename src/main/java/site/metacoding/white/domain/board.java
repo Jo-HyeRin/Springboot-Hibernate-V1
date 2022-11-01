@@ -27,13 +27,17 @@ public class Board {
     @Column(length = 1000)
     private String content;
 
-    // FK가 만들어짐 : user_id
+    // FK가 만들어짐. user_id
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    // 조회를 위해서만 필요함.
+    // 조회를 위해서만 필요함
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     private List<Comment> commentList = new ArrayList<>();
+
+    public void addComment(Comment comment) {
+        this.commentList.add(comment);
+    }
 
     @Builder
     public Board(Long id, String title, String content, User user) {
@@ -48,5 +52,4 @@ public class Board {
         this.title = title;
         this.content = content;
     }
-
 }

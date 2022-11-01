@@ -2,7 +2,6 @@ package site.metacoding.white.web;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

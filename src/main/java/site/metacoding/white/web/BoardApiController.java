@@ -1,10 +1,7 @@
 package site.metacoding.white.web;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.white.dto.BoardReqDto.BoardSaveReqDto;
 import site.metacoding.white.dto.BoardReqDto.BoardUpdateReqDto;
-import site.metacoding.white.dto.BoardRespDto.BoardAllRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto;
 import site.metacoding.white.dto.ResponseDto;
 import site.metacoding.white.dto.SessionUser;
@@ -68,8 +64,8 @@ public class BoardApiController {
     }
 
     @GetMapping("/board")
-    public List<BoardAllRespDto> findAll() {
-        return boardService.findAll();
+    public ResponseDto<?> findAll() {
+        return new ResponseDto<>(1, "성공", boardService.findAll());
     }
 
     @DeleteMapping("/board/{id}")
