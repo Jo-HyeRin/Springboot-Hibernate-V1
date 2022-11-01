@@ -22,4 +22,4 @@ spring:
 logging:
   level:
     '[org.hibernate.SQL]': DEBUG
-    #root: DEBUG
+    '[site.metacoding.white]': DEBUG
