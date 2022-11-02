@@ -21,7 +21,7 @@ public class CommentApiController {
     private final CommentService commentService;
     private final HttpSession session;
 
-    @PostMapping("/comment")
+    @PostMapping("/s/comment")
     public ResponseDto<?> save(@RequestBody CommentSaveReqDto commentSaveReqDto) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         if (sessionUser == null) {
@@ -31,7 +31,7 @@ public class CommentApiController {
         return new ResponseDto<>(1, "성공", commentService.save(commentSaveReqDto));
     }
 
-    @DeleteMapping("/comment/{id}")
+    @DeleteMapping("/s/comment/{id}")
     public ResponseDto<?> deleteById(@PathVariable Long id) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         if (sessionUser == null) {
