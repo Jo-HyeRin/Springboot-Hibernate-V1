@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
 import site.metacoding.white.domain.Board;
 import site.metacoding.white.domain.BoardRepository;
 import site.metacoding.white.domain.Comment;
@@ -29,6 +30,7 @@ import site.metacoding.white.dto.UserReqDto.JoinReqDto;
 import site.metacoding.white.dto.UserReqDto.LoginReqDto;
 import site.metacoding.white.util.SHA256;
 
+@Slf4j
 @ActiveProfiles("test")
 // @Transactional // 통합테스트에서 RANDOM_PORT를 사용하면 새로운 스레드로 돌기때문에 rollback 무의미
 @Sql("classpath:truncate.sql") // classpath : 자바 classpath 공부하기 . 스프링은 기본적으로 resource 폴더 내에 설정되어있다.
@@ -125,6 +127,8 @@ public class UserApiControllerTest {
         loginReqDto.setUsername("ssar");
         loginReqDto.setPassword("1234");
         String body = om.writeValueAsString(loginReqDto);
+
+        log.debug("디버그 : " + body);
 
         // when
         ResultActions resultActions = mvc
